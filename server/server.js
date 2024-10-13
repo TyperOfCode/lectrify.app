@@ -49,7 +49,7 @@ app.post("/admin/addQuiz", (req, res) => {
   if (!allQuizData[code]) {
     allQuizData[code] = [];
   }
-  
+
   allQuizData[code].push(quizData);
 
   // send quiz data to all clients
@@ -75,7 +75,7 @@ app.get("/sse/subscribeToLecture", (req, res) => {
     "Origin, X-Requested-With, Content-Type, Accept"
   );
 
-  const { code } = req.body;
+  const code = req.query.code;
 
   // if the code is not found, return an error
   if (!code) {
