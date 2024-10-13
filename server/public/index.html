@@ -5,10 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lectrify</title>
 
-    <script type="text/javascript" src="quizHandle.js"></script>
+    <script type="module" src="main.js"></script>
     <link rel="stylesheet" href="quizPage.css" />
   </head>
   <body>
-    PAGE!!!
+    <div id="code-input-container" class="hidden">
+      <form id="code-input-form">
+        <a>Input Code: </a>
+        <input type="text" id="code-input" name="code" />
+        <input type="submit" hidden />
+      </form>
+    </div>
+
+    <div id="quiz-container" class="hidden">
+      <div id="quiz-code"></div>
+      <div id="quiz-question">Quiz not started yet</div>
+      <div id="quiz-answers"></div>
+    </div>
   </body>
 </html>
