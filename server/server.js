@@ -1,10 +1,16 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const path = require("path");
+import express from "express";
+import { static as serveStatic } from "express";
+import bodyParser from "body-parser";
+
+const { json } = bodyParser;
+
+import cors from "cors";
+
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 // local imports
-const { quizListToB64 } = require("./quizEncoding.js");
+import { quizListToB64 } from "./quizEncoding.js";
 
 const app = express();
 const PORT = 4000;
@@ -12,7 +18,7 @@ const ORIGIN_URL = "http://localhost:4000";
 const ADMIN_SECRET = "admin";
 
 // middleware
-app.use(bodyParser.json());
+app.use(json());
 app.use(cors());
 
 app.use("/admin", (req, res, next) => {
@@ -24,10 +30,39 @@ app.use("/admin", (req, res, next) => {
 });
 
 // static pages
-app.use(express.static(path.join(__dirname, "public")));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+app.use(serveStatic(join(__dirname, "public")));
 
-let allQuizData = {};
+let allQuizData = {
+  // code: [quizData]
+  // quizData should follow the format of { question: string, answers: string[], correctAnswerIdx: number }
+  TEST: [
+    {
+      question: "What is the capital of France?",
+      answers: ["London", "Paris", "Berlin", "Madrid"],
+      correctAnswerIdx: 1,
+    },
+  ],
+};
 let clients = [];
+
+app.post("/admin/resetQuiz", (req, res) => {
+  const { code } = req.body;
+
+  if (!code) {
+    return res.status(400).json({ error: "Missing code" });
+  }
+
+  allQuizData[code] = [];
+
+  // send quiz data to all clients
+  clients.forEach((client) => {
+    client.res.write(`data: ${quizListToB64(allQuizData[code])}\n\n`);
+  });
+
+  res.json({ success: true });
+});
 
 // receive quiz data from mic & send to listening clients
 app.post("/admin/addQuiz", (req, res) => {
@@ -37,6 +72,8 @@ app.post("/admin/addQuiz", (req, res) => {
   if (!code || !quizData) {
     return res.status(400).json({ error: "Missing code or quiz data" });
   }
+
+  console.log("Received quiz data", quizData);
 
   if (
     !quizData.question ||
@@ -74,6 +111,8 @@ app.get("/sse/subscribeToLecture", (req, res) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+
+  console.log("Connection attempted");
 
   const code = req.query.code;
 
