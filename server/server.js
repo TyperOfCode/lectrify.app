@@ -11,16 +11,26 @@ import { dirname, join } from "path";
 
 // local imports
 import { quizListToB64 } from "./quizEncoding.js";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 const PORT = 4000;
 const ORIGIN_URL = "http://localhost:4000";
 const ADMIN_SECRET = "admin";
 
-// middleware
+//.......................................... middleware
 app.use(json());
 app.use(cors());
 
+const limiter = rateLimit({
+  // 1 min
+  windowMs: 60 * 1000,
+  // 100 reqs
+  max: 100,
+  message: "Too many requests from this IP, please try again later.",
+});
+
+app.use(limiter);
 app.use("/admin", (req, res, next) => {
   const { secret } = req.body;
   if (secret !== ADMIN_SECRET) {
@@ -29,7 +39,7 @@ app.use("/admin", (req, res, next) => {
   next();
 });
 
-// static pages
+//.......................................... static pages
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(serveStatic(join(__dirname, "public")));
@@ -45,6 +55,13 @@ let allQuizData = {
     },
   ],
 };
+
+// TODO: store client answers
+let clientAnswers = {
+  // code: { clientId: { questionIdx: number, answerIdx: number } }
+  TEST: {},
+};
+
 let clients = [];
 
 app.post("/admin/resetQuiz", (req, res) => {
@@ -112,7 +129,7 @@ app.get("/sse/subscribeToLecture", (req, res) => {
     "Origin, X-Requested-With, Content-Type, Accept"
   );
 
-  console.log("Connection attempted");
+  console.log(`[${req.ip}] Connection attempted`);
 
   const code = req.query.code;
 
