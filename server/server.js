@@ -19,6 +19,7 @@ const ORIGIN_URL = "http://localhost:4000";
 const ADMIN_SECRET = "admin";
 
 //.......................................... middleware
+app.set("trust proxy", 1);
 
 app.use(json());
 app.use(cors());

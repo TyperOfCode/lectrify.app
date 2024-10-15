@@ -17,7 +17,7 @@ export function genQuizPage() {
 
 function subscribeToEventStream() {
   const eventSource = new EventSource(
-    `http://localhost:4000/sse/subscribeToLecture?code=${encodeURIComponent(AppData.code)}`
+    `/sse/subscribeToLecture?code=${encodeURIComponent(AppData.code)}`
   );
 
   eventSource.onopen = () => {
@@ -44,7 +44,6 @@ function onReceiveQuizList(quizList) {
   console.log("Received quiz list: ", quizList);
 
   AppData.quizList = quizList;
-
 }
 
 function _routeToCodePage() {
