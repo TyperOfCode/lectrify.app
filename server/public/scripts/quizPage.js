@@ -43,9 +43,9 @@ function _subscribeToEventStream() {
     console.error("Error occurred or connection lost:", error);
 
     if (eventSource.readyState === EventSource.CLOSED) {
-      reconnectionAttempts++;
+      currentReconnects++;
 
-      if (reconnectionAttempts >= maxReconnectionAttempts) {
+      if (currentReconnects >= maxReconnects) {
         console.log("Max reconnection attempts reached. closing...");
         eventSource.close();
         _routeToCodePage();
@@ -114,7 +114,7 @@ function _updateQuizUI() {
     AppData.atQuestion = 0;
   }
 
-  if (AppData.questionList.length === 0) {
+  if (AppData.questionList === undefined || AppData.questionList.length === 0) {
     _handleQuizEmpty();
     return;
   }
