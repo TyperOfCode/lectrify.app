@@ -62,6 +62,12 @@ function _onReceiveQuestionList(questionList) {
   }
 
   AppData.questionList = questionList;
+
+  // if the user is at the last question, move them to the next question
+  if (AppData.atQuestion === AppData.questionList.length - 2) {
+    AppData.atQuestion++;
+  }
+
   _updateQuizUI();
 }
 
