@@ -3,6 +3,9 @@ import { genCodePage } from "./enterCodePage.js";
 
 const AppData = getAppData();
 
+let currentReconnects = 0;
+const maxReconnects = 5;
+
 export async function genQuizPage() {
   console.log("Generating Quiz Page");
 
@@ -28,6 +31,7 @@ function _subscribeToEventStream() {
 
   eventSource.onopen = () => {
     console.log("Connection to the server has been established.");
+    currentReconnects = 0;
   };
 
   eventSource.onmessage = (event) => {
@@ -36,10 +40,17 @@ function _subscribeToEventStream() {
   };
 
   eventSource.onerror = (error) => {
-    console.error("Error occurred:", error);
-    eventSource.close();
+    console.error("Error occurred or connection lost:", error);
 
-    _routeToCodePage();
+    if (eventSource.readyState === EventSource.CLOSED) {
+      reconnectionAttempts++;
+
+      if (reconnectionAttempts >= maxReconnectionAttempts) {
+        console.log("Max reconnection attempts reached. closing...");
+        eventSource.close();
+        _routeToCodePage();
+      }
+    }
   };
 }
 
