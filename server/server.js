@@ -161,8 +161,8 @@ app.get("/sse/subscribeToLecture", (req, res) => {
 
   // remove client from list when connection is closed
   req.on("close", () => {
-    console.log(`[${clients.length}] Client disconnected: ${clientId}`);
     clients = clients.filter((client) => client.id !== clientId);
+    console.log(`[${clients.length}] Client disconnected: ${clientId}`);
   });
 });
 

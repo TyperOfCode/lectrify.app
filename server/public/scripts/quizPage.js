@@ -1,5 +1,5 @@
 import { getAppData } from "./appData.js";
-import { genCodePage } from "./enterCodeHandle.js";
+import { genCodePage } from "./enterCodePage.js";
 
 const AppData = getAppData();
 

@@ -1,4 +1,4 @@
-import { genQuizPage } from "./quizHandle.js";
+import { genQuizPage } from "./quizPage.js";
 import { getAppData } from "./appData.js";
 
 const AppData = getAppData();
@@ -6,10 +6,12 @@ const AppData = getAppData();
 export function genCodePage() {
   console.log("Generating Code Page");
 
-  const element = document.getElementById("code-input-container");
+  const element = document.getElementById("enter-code-page");
   element.classList.remove("hidden");
 
-  const form = document.getElementById("code-input-form");
+  const form = document.getElementById("enter-code-form");
+
+  // add listeners
   form.addEventListener("submit", handleCodeSubmit);
 }
 
@@ -26,7 +28,7 @@ export function handleCodeSubmit(event) {
 }
 
 function _routeToQuizPage() {
-  const element = document.getElementById("code-input-container");
+  const element = document.getElementById("enter-code-page");
   element.classList.add("hidden");
 
   genQuizPage();

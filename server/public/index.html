@@ -5,18 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lectrify</title>
 
+    <!-- outfit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
     <script type="module" src="scripts/main.js"></script>
     <link rel="stylesheet" href="quizPage.css" />
   </head>
   <body>
-    <div id="code-input-container" class="hidden">
-      <form id="code-input-form">
-        <a>Input Code: </a>
-        <input type="text" id="code-input" name="code" />
-        <input type="submit" hidden />
+    <!-- enter code page -->
+    <div id="enter-code-page" class="hidden column-flex-center">
+      <div style="padding-top: 30px"></div>
+
+      <!-- title -->
+      <div
+        class="page-header-center"
+        style="display: flex; flex-direction: row; align-items: center"
+      >
+        <img src="assets/logo.svg" style="width: 64px; height: 64px" />
+        <h1
+          style="
+            font-size: 60px;
+            font-weight: 900;
+            margin-left: 20px;
+            vertical-align: center;
+          "
+        >
+          Lectrify
+        </h1>
+      </div>
+
+      <div style="padding-top: 123px"></div>
+
+      <form id="enter-code-form" class="column-flex-center">
+        <input
+          type="text"
+          id="code-input"
+          class="input inner-border"
+          name="code"
+          placeholder="Code"
+          autocomplete="off"
+        />
+        <button type="submit" class="big-button primary" id="code-submit">
+          Enter !
+        </button>
       </form>
+
+      <div style="padding-top: 123px"></div>
+
+      <div class="column-flex-center">
+        <a> Sponsored By </a>
+        <div style="padding-top: 53px"></div>
+        <img
+          class="sponsor"
+          src="assets/sponsor_2.png"
+          style="width: 223px; height: 64px"
+        />
+
+        <div style="padding-top: 25px"></div>
+        <img
+          class="sponsor"
+          src="assets/sponsor_1.png"
+          style="width: 241px; height: 64px"
+        />
+      </div>
     </div>
 
+    <!-- quiz page -->
     <div id="quiz-container" class="hidden">
       <div id="quiz-code"></div>
       <div id="quiz-question">Quiz not started yet</div>

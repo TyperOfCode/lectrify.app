@@ -1,5 +1,5 @@
-import { genQuizPage } from "./quizHandle.js";
-import { genCodePage, handleCodeSubmit } from "./enterCodeHandle.js";
+import { genQuizPage } from "./quizPage.js";
+import { genCodePage } from "./enterCodePage.js";
 import { getAppData } from "./appData.js";
 
 const AppData = getAppData();
