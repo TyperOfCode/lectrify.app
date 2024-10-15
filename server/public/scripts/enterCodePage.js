@@ -12,10 +12,10 @@ export function genCodePage() {
   const form = document.getElementById("enter-code-form");
 
   // add listeners
-  form.addEventListener("submit", handleCodeSubmit);
+  form.addEventListener("submit", _handleCodeSubmit);
 }
 
-async function handleCodeSubmit(event) {
+async function _handleCodeSubmit(event) {
   event.preventDefault();
   const code = document.getElementById("code-input").value;
   console.log(code);
@@ -26,14 +26,14 @@ async function handleCodeSubmit(event) {
 
   const exists = await _checkIfQuizExists();
   if (!exists) {
-    onCodeNotExist();
+    _onCodeNotExist();
     return;
   }
 
   _routeToQuizPage();
 }
 
-function onCodeNotExist() {
+function _onCodeNotExist() {
   // shake the code input box
   const input = document.getElementById("code-input");
 

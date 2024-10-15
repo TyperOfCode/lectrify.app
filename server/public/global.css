@@ -1,10 +1,11 @@
 /* colors */
 :root {
   --background-dm: #010922;
+  --background-darker-dm: #00040f;
   --alt-action-dm: #e4af3a;
 
   --primary-800-dm: #63a9f8;
-  --primary-500-dm: #4472a8;
+  --primary-500-dm: #63a9f71a;
 
   --secondary-dm: #4b576b;
 

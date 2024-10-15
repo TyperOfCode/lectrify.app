@@ -66,7 +66,7 @@ app.use(serveStatic(join(__dirname, "public")));
  */
 let roomAppData = {
   1234: {
-    quizTitle: "COMP1511 Week 2 Lecture 1",
+    quizTitle: "DevSoc Demo Week 1",
     questionList: [
       // {
       //   quizId: 1,

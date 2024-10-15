@@ -7,15 +7,15 @@
 
     <!-- outfit -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap"
       rel="stylesheet"
     />
-
-    <script type="module" src="scripts/main.js"></script>
 
     <link rel="stylesheet" href="global.css" />
     <link rel="stylesheet" href="codePage.css" />
     <link rel="stylesheet" href="quizPage.css" />
+
+    <script type="module" src="scripts/main.js" defer></script>
   </head>
   <body>
     <!-- enter code page -->
@@ -62,26 +62,25 @@
 
       <div style="padding-top: 40px"></div>
 
-      <div class="column-flex-center">
+      <!-- sponsors -->
+      <div class="column-flex-center" style="gap: 30px">
         <a> Sponsored By </a>
-        <div style="padding-top: 20px"></div>
         <img
           class="sponsor"
           src="assets/sponsor_2.png"
-          style="width: 150px; height: 40px"
+          style="width: 150px; height: 42px"
         />
 
-        <div style="padding-top: 15px"></div>
         <img
           class="sponsor"
           src="assets/sponsor_1.png"
-          style="width: 160px; height: 40px"
+          style="width: 160px; height: 42px"
         />
       </div>
     </div>
 
     <!-- quiz page -->
-    <div id="quiz-container" class="hidden">
+    <div id="quiz-page-container" class="hidden">
       <!-- title -->
       <div style="display: flex; flex-direction: row; align-items: center">
         <img src="assets/logo.svg" style="width: 38px; height: 38px" />
@@ -98,10 +97,24 @@
         <div style="flex-grow: 1"></div>
         <div id="quiz-code"></div>
       </div>
-      <div id="quiz-title"></div>
 
-      <div id="quiz-question">Quiz not started yet</div>
-      <div id="quiz-answers"></div>
+      <div id="quiz-title">Quiz title</div>
+
+      <div style="padding-top: 3em"></div>
+      <div id="question-container" class="column-flex-center">
+        <div id="quiz-question" class="styled-box primary-box hidden"></div>
+        <div style="padding-top: 2.5em"></div>
+        <div
+          id="quiz-answers"
+          class="column-flex-center hidden"
+          style="gap: 1em"
+        ></div>
+
+        <div id="waiting-box" class="styled-box">
+          <div class="container-icon">?</div>
+          <div class="container-title">Waiting for questions...</div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

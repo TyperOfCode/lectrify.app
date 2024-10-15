@@ -1,6 +1,6 @@
 /**
  * @typedef {Object} Question
- * @property {int} questionId - the id of the question
+ * @property {number} questionId - the id of the question
  * @property {string} question - The question
  * @property {string[]} options - The options to choose for the question
  * @property {number} correctAnswerIdx - The index of the correct answer
@@ -8,15 +8,18 @@
 
 /**
  * @typedef {Object} UserAnswer
- * @property {string} question - The question
+ * @property {id} questionId - The question id
+ * @property {boolean} gotRight - Whether they got it right the first time
+ * @property {number[]} tried - A list of all the option indexes they've already tried
  */
 
 /**
  * @typedef {Object} AppData
  * @property {string|null} code - The code associated with the application data.
- * @property {Array[Question]|null} questionList - The list of questions
+ * @property {Question[]|null} questionList - The list of questions
  * @property {String|null} quizTitle  - The title of the quiz
- * @property {String|null} userQuestionAnswers - The user's answers to the questions
+ * @property {UserAnswer[]|null} userQuestionAnswers - The user's answers to the questions
+ * @property {number} atQuestion - The question the user is currently at
  */
 
 /**
@@ -25,6 +28,7 @@
  */
 const AppData = {
   code: null,
+  atQuestion: 0,
 };
 
 /**

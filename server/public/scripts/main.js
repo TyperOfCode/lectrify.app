@@ -22,4 +22,6 @@ function mainOnPageLoad() {
   genCodePage();
 }
 
-window.onload = mainOnPageLoad;
+document.addEventListener("DOMContentLoaded", function () {
+  mainOnPageLoad();
+});
