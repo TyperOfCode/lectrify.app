@@ -12,7 +12,7 @@ export function genQuizPage() {
   element.classList.remove("hidden");
 
   const title = document.getElementById("quiz-code");
-  title.innerHTML = `Lecture Code: ${AppData.code}`;
+  title.innerHTML = AppData.code;
 }
 
 function subscribeToEventStream() {

@@ -26,14 +26,14 @@ async function handleCodeSubmit(event) {
 
   const exists = await _checkIfQuizExists();
   if (!exists) {
-    shakeCodeInputBox();
+    onCodeNotExist();
     return;
   }
 
   _routeToQuizPage();
 }
 
-function shakeCodeInputBox() {
+function onCodeNotExist() {
   // shake the code input box
   const input = document.getElementById("code-input");
 
@@ -42,8 +42,14 @@ function shakeCodeInputBox() {
   }
   input.classList.add("shake");
 
+  if (input.classList.contains("red-outline")) {
+    return;
+  }
+  input.classList.add("red-outline");
+
   setTimeout(() => {
     input.classList.remove("shake");
+    input.classList.remove("red-outline");
   }, 500);
 }
 

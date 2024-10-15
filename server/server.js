@@ -37,26 +37,50 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(serveStatic(join(__dirname, "public")));
 
-let allQuizData = {
-  // code: [quizData]
-  // quizData should follow the format of { question: string, answers: string[], correctAnswerIdx: number }
-  1234: [
-    {
-      question: "What is the capital of France?",
-      answers: ["London", "Paris", "Berlin", "Madrid"],
-      correctAnswerIdx: 1,
-    },
-  ],
-};
+//.......................................... define types
 
-// TODO: store client answers
-let clientAnswers = {
-  // code: { clientId: { questionIdx: number, answerIdx: number } }
-  1234: {},
+/**
+ * @typedef {Object} Question
+ * @property {number} questionId - The ID of the question.
+ * @property {string} question - The question text.
+ * @property {string[]} options - The options to choose from for the question.
+ * @property {number} correctAnswerIdx - The index of the correct answer.
+ */
+
+/**
+ * @typedef {Object} Quiz
+ * @property {number} quizId - The ID of the quiz.
+ * @property {string} question - The quiz question.
+ * @property {string[]} answers - The possible answers for the quiz question.
+ * @property {number} correctAnswerIdx - The index of the correct answer.
+ */
+/**
+ * @typedef {Object} RoomAppData
+ * @property {Object.<number, {quizTitle: string, questionList: Quiz[]}>} roomAppData - The data structure holding quiz information for each room.
+ */
+
+//.......................................... app
+
+/**
+ * @type {RoomAppData}
+ */
+let roomAppData = {
+  1234: {
+    quizTitle: "COMP1511 Week 2 Lecture 1",
+    questionList: [
+      {
+        quizId: 1,
+        question: "What is the capital of France?",
+        answers: ["London", "Paris", "Berlin", "Madrid"],
+        correctAnswerIdx: 1,
+      },
+    ],
+  },
 };
 
 let clients = [];
 
+//.......................................... admin routes
 app.post("/admin/resetQuiz", (req, res) => {
   const { code } = req.body;
 
@@ -64,11 +88,11 @@ app.post("/admin/resetQuiz", (req, res) => {
     return res.status(400).json({ error: "Missing code" });
   }
 
-  allQuizData[code] = [];
+  roomAppData[code].questionList = [];
 
   // send quiz data to all clients
   clients.forEach((client) => {
-    client.res.write(`data: ${quizListToB64(allQuizData[code])}\n\n`);
+    client.res.write(`data: ${quizListToB64(roomAppData[code])}\n\n`);
   });
 
   res.json({ success: true });
@@ -76,36 +100,43 @@ app.post("/admin/resetQuiz", (req, res) => {
 
 // receive quiz data from mic & send to listening clients
 app.post("/admin/addQuiz", (req, res) => {
-  const { code, quizData } = req.body;
+  const { code, questionData: qData } = req.body;
 
   // quizData should follow the format of { question: string, answers: string[], correctAnswerIdx: number }
-  if (!code || !quizData) {
+  if (!code || !qData) {
     return res.status(400).json({ error: "Missing code or quiz data" });
   }
 
-  console.log("Received quiz data", quizData);
+  console.log("Received quiz data", qData);
 
   if (
-    !quizData.question ||
-    !quizData.answers ||
-    quizData.correctAnswerIdx === undefined
+    !qData.question ||
+    !qData.options ||
+    qData.correctAnswerIdx === undefined
   ) {
     return res.status(400).json({ error: "Invalid quiz data" });
   }
 
-  if (!allQuizData[code]) {
-    allQuizData[code] = [];
+  if (!roomAppData[code].questionList) {
+    roomAppData[code].questionList = [];
   }
 
-  allQuizData[code].push(quizData);
+  const questionId = Date.now();
+  qData.questionId = questionId;
+
+  roomAppData[code].questionList.push(qData);
 
   // send quiz data to all clients
   clients.forEach((client) => {
-    client.res.write(`data: ${quizListToB64(allQuizData[code])}\n\n`);
+    client.res.write(
+      `data: ${quizListToB64(roomAppData[code].questionList)}\n\n`
+    );
   });
 
   res.json({ success: true });
 });
+
+// .......................................... client routes
 
 // event stream endpoint
 app.get("/sse/subscribeToLecture", (req, res) => {
@@ -132,11 +163,11 @@ app.get("/sse/subscribeToLecture", (req, res) => {
   }
 
   // code must exist
-  if (allQuizData[code] === undefined) {
+  if (roomAppData[code] === undefined) {
     return res.status(400).json({ error: "Code doesnt exist" });
   }
 
-  const quizList = allQuizData[code] || [];
+  const quizList = roomAppData[code].questionList || [];
 
   // load existing quiz data
   if (quizList.length > 0) {
@@ -167,11 +198,26 @@ app.post("/checkCode", (req, res) => {
     return res.status(400).json({ error: "Missing code" });
   }
 
-  if (allQuizData[code] === undefined) {
+  if (roomAppData[code] === undefined) {
     return res.json({ exists: false });
   }
 
   res.json({ exists: true });
+});
+
+// fetch quiz data
+app.get("/getQuizTitle", (req, res) => {
+  const { code } = req.query;
+
+  if (!code) {
+    return res.status(400).json({ error: "Missing code" });
+  }
+
+  if (roomAppData[code] === undefined) {
+    return res.status(400).json({ error: "Code doesnt exist" });
+  }
+
+  res.json(roomAppData[code].quizTitle);
 });
 
 // start server

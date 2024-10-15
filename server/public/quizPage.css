@@ -1,151 +1,17 @@
-/* colors */
-:root {
-  --background-dm: #010922;
-  --alt-action-dm: #e4af3a;
-
-  --primary-800-dm: #63a9f8;
-  --primary-500-dm: #4472a8;
-
-  --secondary-dm: #4b576b;
-
-  --text-dm: #ffffff;
-  --secondary-text-dm: #767676;
-
-  --green-800: #31cd63;
-  --green-800-bg: #a7fec233;
-
-  --red-800: #fe2c55;
-  --red-800-bg: #f88fa233;
+#quiz-container {
+  padding: 10px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
 }
 
-/* animations */
-
-@keyframes tilt-shaking {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(5deg);
-  }
-  50% {
-    transform: rotate(0eg);
-  }
-  75% {
-    transform: rotate(-5deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-/* other */
-
-body {
-  font-family: "Outfit", sans-serif;
-  margin: 20px;
-  padding: 0;
-  background-color: var(--background-dm);
-  color: var(--text-dm);
-}
-
-button.big-button {
-  width: 255px;
-  height: 65px;
-
-  font-size: 30px;
-  font-weight: 700;
-
-  padding: 10px 20px;
-  margin: 10px;
-  border-radius: 10px;
-  background-color: var(--primary-800-dm);
-  color: var(--text-dm);
-  border: none;
-  cursor: pointer;
-
-  transition: background-color 0.3s;
-
-  /* no text select */
-  user-select: none;
-}
-
-button.big-button:active {
-  background-color: var(--primary-500-dm);
-}
-
-a {
-  font-size: 28px;
-  font-weight: 500;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.column-flex-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.inner-border {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-
-.input {
-  --webkit-appearance: none;
-
-  background-color: var(--text-dm);
-
-  border-style: solid;
-  border-color: var(--secondary-text-dm);
-  border-width: 3px;
-
-  border-radius: 10px;
-  outline: none;
-
+#quiz-code {
+  color: var(--secondary-dm);
+  font-weight: 600;
+  font-size: 21px;
   text-align: center;
-  font-size: 30px;
-  color: var(--secondary-text-dm);
+  vertical-align: center;
 }
 
-.shake {
-  animation: tilt-shaking 0.2s;
-}
-/* Enter Code Page */
-
-#code-input {
-  width: 255px;
-  height: 65px;
-}
-
-.sponsor {
-  opacity: 0.6;
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  button.big-button {
-    width: 210px;
-    height: 60px;
-    font-size: 24px;
-    padding: 8px 16px;
-    margin: 8px;
-  }
-
-  a {
-    font-size: 24px;
-  }
-
-  #code-input {
-    width: 210px;
-    height: 60px;
-  }
-
-  .input {
-    font-size: 24px;
-  }
+/* laptop view */
+@media (min-width: 600px) {
 }

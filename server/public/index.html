@@ -12,6 +12,9 @@
     />
 
     <script type="module" src="scripts/main.js"></script>
+
+    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="codePage.css" />
     <link rel="stylesheet" href="quizPage.css" />
   </head>
   <body>
@@ -28,10 +31,10 @@
         class="page-header-center"
         style="display: flex; flex-direction: row; align-items: center"
       >
-        <img src="assets/logo.svg" style="width: 48px; height: 48px" />
+        <img src="assets/logo.svg" style="width: 64px; height: 64px" />
         <h1
           style="
-            font-size: 40px;
+            font-size: 50px;
             font-weight: 900;
             margin-left: 10px;
             vertical-align: center;
@@ -79,7 +82,24 @@
 
     <!-- quiz page -->
     <div id="quiz-container" class="hidden">
-      <div id="quiz-code"></div>
+      <!-- title -->
+      <div style="display: flex; flex-direction: row; align-items: center">
+        <img src="assets/logo.svg" style="width: 38px; height: 38px" />
+        <h1
+          style="
+            font-size: 35px;
+            font-weight: 600;
+            margin-left: 10px;
+            vertical-align: center;
+          "
+        >
+          Lectrify
+        </h1>
+        <div style="flex-grow: 1"></div>
+        <div id="quiz-code"></div>
+      </div>
+      <div id="quiz-title"></div>
+
       <div id="quiz-question">Quiz not started yet</div>
       <div id="quiz-answers"></div>
     </div>
