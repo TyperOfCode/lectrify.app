@@ -178,6 +178,10 @@ app.get("/sse/subscribeToLecture", (req, res) => {
     res.write(`data: ${quizListToB64(quizList)}\n\n`);
   }
 
+  const keepAliveInterval = setInterval(() => {
+    res.write(": keep-alive\n\n");
+  }, 25000);
+
   // add client to list
   const clientId = Date.now();
   const newClient = {
@@ -189,6 +193,7 @@ app.get("/sse/subscribeToLecture", (req, res) => {
 
   // remove client from list when connection is closed
   req.on("close", () => {
+    clearInterval(keepAliveInterval);
     clients = clients.filter((client) => client.id !== clientId);
     console.log(`[${clients.length}] Client disconnected: ${clientId}`);
   });
