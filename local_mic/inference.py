@@ -48,7 +48,7 @@ If there is no question, set hasQuestion to false.
         "content": userSpeech,
       }
     ],
-    max_completion_tokens=100,
+    max_completion_tokens=50,
     response_format=QuestionResponse
   )
   end_time = time.time()
@@ -122,9 +122,9 @@ def generateMultipleChoice(question) -> tuple[IsRelevantResponse | None, int]:
   Each answer must be concise so they can be read fast.
   
   Only 1 of them may be correct.
-  3 of them must be plausible but distinctly incorrect.
+  3 of them must be plausible, but incorrect.
   
-  The answers should be difficult enough to make people think.
+  The answers should be DIFFICULT and they need to make people think.
   """
   
   start_time = time.time()
