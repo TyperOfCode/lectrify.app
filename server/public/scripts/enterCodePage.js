@@ -15,7 +15,7 @@ export function genCodePage() {
   form.addEventListener("submit", handleCodeSubmit);
 }
 
-export function handleCodeSubmit(event) {
+async function handleCodeSubmit(event) {
   event.preventDefault();
   const code = document.getElementById("code-input").value;
   console.log(code);
@@ -24,7 +24,27 @@ export function handleCodeSubmit(event) {
 
   AppData.code = code;
 
+  const exists = await _checkIfQuizExists();
+  if (!exists) {
+    shakeCodeInputBox();
+    return;
+  }
+
   _routeToQuizPage();
+}
+
+function shakeCodeInputBox() {
+  // shake the code input box
+  const input = document.getElementById("code-input");
+
+  if (input.classList.contains("shake")) {
+    return;
+  }
+  input.classList.add("shake");
+
+  setTimeout(() => {
+    input.classList.remove("shake");
+  }, 500);
 }
 
 function _routeToQuizPage() {
@@ -32,4 +52,30 @@ function _routeToQuizPage() {
   element.classList.add("hidden");
 
   genQuizPage();
+}
+
+async function _checkIfQuizExists() {
+  const code = AppData.code;
+
+  if (!code) {
+    return false;
+  }
+
+  // if code stripped length is not 4 then return
+  if (code.trim().length !== 4) {
+    return false;
+  }
+
+  // send code in body to /checkCode
+  const res = await fetch("/checkCode", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ code }),
+  });
+
+  const data = await res.json();
+
+  return data.exists;
 }

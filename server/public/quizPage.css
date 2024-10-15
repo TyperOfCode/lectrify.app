@@ -18,6 +18,28 @@
   --red-800-bg: #f88fa233;
 }
 
+/* animations */
+
+@keyframes tilt-shaking {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0eg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* other */
+
 body {
   font-family: "Outfit", sans-serif;
   margin: 20px;
@@ -90,6 +112,9 @@ a {
   color: var(--secondary-text-dm);
 }
 
+.shake {
+  animation: tilt-shaking 0.2s;
+}
 /* Enter Code Page */
 
 #code-input {
@@ -104,8 +129,8 @@ a {
 /* Responsive adjustments */
 @media (max-width: 600px) {
   button.big-button {
-    width: 200px;
-    height: 50px;
+    width: 210px;
+    height: 60px;
     font-size: 24px;
     padding: 8px 16px;
     margin: 8px;
@@ -116,8 +141,8 @@ a {
   }
 
   #code-input {
-    width: 200px;
-    height: 50px;
+    width: 210px;
+    height: 60px;
   }
 
   .input {

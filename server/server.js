@@ -40,7 +40,7 @@ app.use(serveStatic(join(__dirname, "public")));
 let allQuizData = {
   // code: [quizData]
   // quizData should follow the format of { question: string, answers: string[], correctAnswerIdx: number }
-  TEST: [
+  1234: [
     {
       question: "What is the capital of France?",
       answers: ["London", "Paris", "Berlin", "Madrid"],
@@ -52,7 +52,7 @@ let allQuizData = {
 // TODO: store client answers
 let clientAnswers = {
   // code: { clientId: { questionIdx: number, answerIdx: number } }
-  TEST: {},
+  1234: {},
 };
 
 let clients = [];
@@ -157,6 +157,21 @@ app.get("/sse/subscribeToLecture", (req, res) => {
     clients = clients.filter((client) => client.id !== clientId);
     console.log(`[${clients.length}] Client disconnected: ${clientId}`);
   });
+});
+
+// check to see if quiz room exists
+app.post("/checkCode", (req, res) => {
+  const { code } = req.body;
+
+  if (!code) {
+    return res.status(400).json({ error: "Missing code" });
+  }
+
+  if (allQuizData[code] === undefined) {
+    return res.json({ exists: false });
+  }
+
+  res.json({ exists: true });
 });
 
 // start server
