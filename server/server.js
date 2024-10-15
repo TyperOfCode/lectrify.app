@@ -19,20 +19,10 @@ const ORIGIN_URL = "http://localhost:4000";
 const ADMIN_SECRET = "admin";
 
 //.......................................... middleware
-app.set("trust proxy", true);
 
 app.use(json());
 app.use(cors());
 
-const limiter = rateLimit({
-  // 1 min
-  windowMs: 60 * 1000,
-  // 100 reqs
-  max: 100,
-  message: "Too many requests from this IP, please try again later.",
-});
-
-app.use(limiter);
 app.use("/admin", (req, res, next) => {
   const { secret } = req.body;
   if (secret !== ADMIN_SECRET) {
