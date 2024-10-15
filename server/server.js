@@ -179,7 +179,7 @@ app.get("/sse/subscribeToLecture", (req, res) => {
   }
 
   const keepAliveInterval = setInterval(() => {
-    console.log(`Sending keep alive to ${req.ip}`);
+    // console.log(`Sending keep alive to ${req.ip}`);
     res.write(": keep-alive\n\n");
   }, 25000);
 
