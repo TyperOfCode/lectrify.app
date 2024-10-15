@@ -68,12 +68,12 @@ let roomAppData = {
   1234: {
     quizTitle: "COMP1511 Week 2 Lecture 1",
     questionList: [
-      {
-        quizId: 1,
-        question: "What is the capital of France?",
-        answers: ["London", "Paris", "Berlin", "Madrid"],
-        correctAnswerIdx: 1,
-      },
+      // {
+      //   quizId: 1,
+      //   question: "What is the capital of France?",
+      //   options: ["London", "Paris", "Berlin", "Madrid"],
+      //   correctAnswerIdx: 1,
+      // },
     ],
   },
 };
@@ -115,6 +115,10 @@ app.post("/admin/addQuiz", (req, res) => {
     qData.correctAnswerIdx === undefined
   ) {
     return res.status(400).json({ error: "Invalid quiz data" });
+  }
+
+  if (!roomAppData[code]) {
+    return res.status(400).json({ error: "Room code doesn't exist." });
   }
 
   if (!roomAppData[code].questionList) {
@@ -206,8 +210,8 @@ app.post("/checkCode", (req, res) => {
 });
 
 // fetch quiz data
-app.get("/getQuizTitle", (req, res) => {
-  const { code } = req.query;
+app.post("/getQuizTitle", (req, res) => {
+  const { code } = req.body;
 
   if (!code) {
     return res.status(400).json({ error: "Missing code" });
@@ -217,7 +221,7 @@ app.get("/getQuizTitle", (req, res) => {
     return res.status(400).json({ error: "Code doesnt exist" });
   }
 
-  res.json(roomAppData[code].quizTitle);
+  res.json({ quizTitle: roomAppData[code].quizTitle });
 });
 
 // start server
