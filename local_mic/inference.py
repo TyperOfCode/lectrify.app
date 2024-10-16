@@ -93,7 +93,7 @@ Keep in mind this is transcribed text, and could have errors, use judgement to d
         "content": question,
       },
     ],
-    max_completion_tokens=50,
+    max_completion_tokens=20,
     temperature=0.0,
     response_format=IsRelevantResponse
   )
@@ -137,7 +137,7 @@ def generateMultipleChoice(question) -> tuple[IsRelevantResponse | None, int]:
         "content": question,
       },
     ],
-    max_completion_tokens=300,
+    max_completion_tokens=200,
     temperature=1,
     response_format=MultipleChoiceOptions
   )
