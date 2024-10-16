@@ -30,6 +30,8 @@
   font-weight: 600;
   margin-left: 10px;
   vertical-align: center;
+
+  cursor: pointer;
 }
 
 /* navigation */
@@ -81,28 +83,6 @@
 
 #go-right {
   margin-left: 1.2em;
-}
-
-#close-button {
-  margin-right: 0.5em;
-  color: var(--red-800);
-  background-color: var(--red-800-bg);
-
-  border-radius: 50%;
-  padding: 0.1em;
-
-  cursor: pointer;
-}
-
-.close-icon {
-  font-size: 32px;
-  transition: color 0.3s;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  user-select: none;
 }
 
 /* page */

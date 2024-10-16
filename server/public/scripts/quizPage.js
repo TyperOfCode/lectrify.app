@@ -1,4 +1,9 @@
-import { getAppData, clearLocalStorage, saveAppData, loadAppData } from "./appData.js";
+import {
+  getAppData,
+  clearLocalStorage,
+  saveAppData,
+  loadAppData,
+} from "./appData.js";
 import { genCodePage } from "./enterCodePage.js";
 
 const AppData = getAppData();
@@ -12,7 +17,6 @@ export async function genQuizPage() {
   loadAppData();
 
   try {
-
     await _initialAppState();
     _subscribeToEventStream();
     _updateQuizToQuestion(null);
@@ -372,7 +376,7 @@ function _attachQuizNavigationButtons() {
   nextButton.onclick = _onNextQuestion;
 
   // close button
-  const closeButton = document.getElementById("close-button");
+  const closeButton = document.getElementById("quiz-logo-title");
   closeButton.onclick = _routeToCodePage;
 
   _updateButtonEnabledState();
