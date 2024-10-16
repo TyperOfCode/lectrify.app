@@ -15,6 +15,7 @@ import {
 import { genCodePage } from "./enterCodePage.js";
 
 const AppData = getAppData();
+const mediaQuery = window.matchMedia("(max-width: 600px)");
 
 let currentReconnects = 0;
 const maxReconnects = 3;
@@ -35,6 +36,7 @@ export async function genQuizPage(code) {
     _subscribeToEventStream();
     _updateQuizToQuestion(null);
     _attachQuizNavigationButtons();
+    _handleViewportChange(mediaQuery);
   } catch (error) {
     console.error("Error generating quiz page:", error);
   }
@@ -229,6 +231,7 @@ function _updateQuizUI() {
 
   // update button state
   _updateButtonEnabledState();
+  _updateProgressBar();
 }
 
 function _handleQuizEmpty() {
@@ -278,6 +281,7 @@ async function _onAnswerClick(
   }
 
   addTriedToUserQuestionAnswers(questionId, chosenIndex);
+  _updateProgressBar();
 
   console.log(AppData);
 }
@@ -417,3 +421,121 @@ function _onNextQuestion() {
 }
 
 // .......................................... quiz progress bar
+
+const progressBarPhoneState = "progress-bar-ph";
+const progressBarLaptopState = "progress-bar";
+
+let progressBarState = null;
+
+function _updateProgressBar() {
+  const progressBar = document.getElementById(progressBarState);
+
+  progressBar.innerHTML = "";
+
+  AppData.questionList.forEach((question, index) => {
+    const percentage = 100 / AppData.questionList.length;
+
+    const userAnswer = AppData.userQuestionAnswers.find(
+      (answer) => answer.questionId === question.questionId
+    );
+
+    let color = "var(--secondary-dm)";
+    if (userAnswer === undefined) {
+    } else if (userAnswer.gotRight === true) {
+      color = "var(--green-400)";
+    } else if (userAnswer.gotRight === false) {
+      color = "var(--red-400)";
+    }
+
+    let element;
+
+    if (index === 0) {
+      element = _createStartElement(
+        percentage,
+        color,
+        AppData.atQuestion === index
+      );
+    } else if (index === AppData.questionList.length - 1) {
+      element = _createEndElement(
+        percentage,
+        color,
+        AppData.atQuestion === index
+      );
+    } else {
+      element = _createMiddleElement(
+        percentage,
+        color,
+        AppData.atQuestion === index
+      );
+    }
+
+    progressBar.appendChild(element);
+  });
+}
+
+function _handleViewportChange(e) {
+  const progressBarPhone = document.getElementById(progressBarPhoneState);
+  const progressBarLaptop = document.getElementById(progressBarLaptopState);
+
+  if (e.matches) {
+    // if phone
+    if (progressBarState === progressBarPhoneState) {
+      return;
+    }
+
+    progressBarState = progressBarPhoneState;
+
+    progressBarPhone.classList.remove("hidden");
+    progressBarLaptop.classList.add("hidden");
+
+    _updateProgressBar();
+  } else {
+    // if laptop
+    if (progressBarState === progressBarLaptopState) {
+      return;
+    }
+
+    progressBarPhone.classList.add("hidden");
+    progressBarLaptop.classList.remove("hidden");
+
+    progressBarState = progressBarLaptopState;
+    _updateProgressBar();
+  }
+}
+
+function _createProgressElement(percentage, color, atElement = false) {
+  const element = document.createElement("div");
+  element.style.width = `${percentage}%`;
+  element.style.height = "100%";
+
+  element.style.backgroundColor = color;
+  element.style.zIndex = "2";
+
+  if (atElement) {
+    element.style.boxShadow = "inset 0 0 0 3px var(--background-dm)";
+  }
+
+  return element;
+}
+
+function _createStartElement(percentage, color, atElement = false) {
+  const element = _createProgressElement(percentage, color, atElement);
+
+  element.style.borderTopLeftRadius = "10px";
+  element.style.borderBottomLeftRadius = "10px";
+  return element;
+}
+
+function _createMiddleElement(percentage, color, atElement = false) {
+  return _createProgressElement(percentage, color, atElement);
+}
+
+function _createEndElement(percentage, color, atElement = false) {
+  const element = _createProgressElement(percentage, color, atElement);
+
+  element.style.borderTopRightRadius = "10px";
+  element.style.borderBottomRightRadius = "10px";
+  return element;
+}
+
+mediaQuery.addEventListener("change", _handleViewportChange);

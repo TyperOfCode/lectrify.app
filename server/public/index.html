@@ -91,7 +91,7 @@
     <!-- quiz page -->
     <div id="quiz-page-container" class="hidden">
       <!-- title -->
-      <div style="display: flex; flex-direction: row; align-items: center">
+      <div class="row-flex-center">
         <div class="quiz-navigate phone-only" id="go-left-ph">
           <span class="material-icons nav-icon">
             keyboard_double_arrow_left
@@ -114,7 +114,13 @@
 
       <div id="quiz-title">Quiz title</div>
 
-      <div style="padding-top: 2em"></div>
+      <div id="header-quiz-divider"></div>
+
+      <!-- progress bar phone -->
+      <div class="row-flex-center">
+        <div id="progress-bar-ph" class="hidden"></div>
+      </div>
+
       <div id="question-container" class="column-flex-center">
         <!-- question space -->
         <div class="row-flex-center">
@@ -146,6 +152,11 @@
           <div class="container-icon">?</div>
           <div class="container-title">Waiting for questions...</div>
         </div>
+      </div>
+
+      <!-- progress bar laptop -->
+      <div class="row-flex-center">
+        <div id="progress-bar" class="hidden"></div>
       </div>
     </div>
   </body>

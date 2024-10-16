@@ -7,7 +7,6 @@ const AppData = getAppData();
 function mainOnPageLoad() {
   console.log("PAGE LOADED!");
 
-  
   let code = AppData.code;
 
   if (code) {
