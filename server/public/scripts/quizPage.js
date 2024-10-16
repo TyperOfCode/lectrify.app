@@ -1,16 +1,18 @@
-import { getAppData } from "./appData.js";
+import { getAppData, clearLocalStorage, saveAppData, loadAppData } from "./appData.js";
 import { genCodePage } from "./enterCodePage.js";
 
 const AppData = getAppData();
 
 let currentReconnects = 0;
-const maxReconnects = 5;
+const maxReconnects = 3;
 
 export async function genQuizPage() {
   console.log("Generating Quiz Page");
 
+  loadAppData();
+
   try {
-    AppData.questionList = [];
+
     await _initialAppState();
     _subscribeToEventStream();
     _updateQuizToQuestion(null);
@@ -170,8 +172,8 @@ function _updateQuizUI() {
       answer
     );
 
-    answerElement.onclick = () =>
-      _onAnswerClick(
+    answerElement.onclick = async () =>
+      await _onAnswerClick(
         question.questionId,
         index,
         question.correctAnswerIdx,
@@ -179,6 +181,25 @@ function _updateQuizUI() {
         containerIcon,
         index === question.correctAnswerIdx
       );
+
+    // check if there is an answer to this question
+    const answerIndex = AppData.userQuestionAnswers.findIndex(
+      (answer) => answer.questionId === question.questionId
+    );
+
+    if (answerIndex !== -1) {
+      const answer = AppData.userQuestionAnswers[answerIndex];
+
+      if (answer.tried.includes(index)) {
+        if (index === question.correctAnswerIdx) {
+          answerElement.classList.add("green-box");
+          containerIcon.classList.add("green-text");
+        } else {
+          answerElement.classList.add("red-box");
+          containerIcon.classList.add("red-text");
+        }
+      }
+    }
 
     answerListElement.appendChild(answerElement);
   });
@@ -202,7 +223,7 @@ function _handleQuizEmpty() {
   answerListElement.classList.add("hidden");
 }
 
-function _onAnswerClick(
+async function _onAnswerClick(
   questionId,
   chosenIndex,
   correctIndex,
@@ -210,9 +231,30 @@ function _onAnswerClick(
   containerIcon,
   isCorrect
 ) {
-  const answerIndex = AppData.userQuestionAnswers.findIndex(
+  let answerIndex = AppData.userQuestionAnswers.findIndex(
     (answer) => answer.questionId === questionId
   );
+
+  if (answerIndex == -1) {
+    AppData.userQuestionAnswers.push({
+      questionId,
+      gotRight: isCorrect,
+      tried: [],
+    });
+
+    _sendAnswerToServer(questionId, chosenIndex);
+    answerIndex = AppData.userQuestionAnswers.length - 1;
+  }
+
+  const question = AppData.userQuestionAnswers[answerIndex];
+
+  if (AppData.userQuestionAnswers[answerIndex].tried.includes(correctIndex)) {
+    return;
+  }
+
+  if (AppData.userQuestionAnswers[answerIndex].tried.includes(chosenIndex)) {
+    return;
+  }
 
   if (isCorrect) {
     answerElement.classList.add("green-box");
@@ -222,17 +264,34 @@ function _onAnswerClick(
     containerIcon.classList.add("red-text");
   }
 
-  if (answerIndex !== -1) {
-    const question = AppData.userQuestionAnswers[answerIndex];
-    question.tried.push(chosenIndex);
-    return;
+  question.tried.push(chosenIndex);
+
+  console.log(AppData);
+}
+
+async function _sendAnswerToServer(questionId, answerIdx) {
+  const code = AppData.code;
+
+  if (!code) {
+    return false;
   }
 
-  AppData.userQuestionAnswers.push({
-    questionId: questionId,
-    gotRight: isCorrect,
-    tried: [chosenIndex],
+  // if code stripped length is not 4 then return
+  if (code.trim().length !== 4) {
+    return false;
+  }
+
+  const res = await fetch("/submitAnswerStat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ code, questionId, answerIdx }),
   });
+
+  const data = await res.json();
+
+  console.log("Submitted answer: ", data);
 }
 
 function _createQuestionContainer(icon, label) {
@@ -268,6 +327,14 @@ function _updateButtonEnabledState() {
   const prevButton = document.getElementById("go-left");
   const nextButton = document.getElementById("go-right");
 
+  if (AppData.questionList === undefined || AppData.questionList.length === 0) {
+    prevButton.classList.add("hidden");
+    nextButton.classList.add("hidden");
+  } else {
+    prevButton.classList.remove("hidden");
+    nextButton.classList.remove("hidden");
+  }
+
   if (AppData.atQuestion === 0) {
     prevButtonPh.classList.add("disabled");
     prevButton.classList.add("disabled");
@@ -298,12 +365,15 @@ function _attachQuizNavigationButtons() {
   nextButtonPh.onclick = _onNextQuestion;
 
   // desktop buttons
-
   const prevButton = document.getElementById("go-left");
   const nextButton = document.getElementById("go-right");
 
   prevButton.onclick = _onPrevQuestion;
   nextButton.onclick = _onNextQuestion;
+
+  // close button
+  const closeButton = document.getElementById("close-button");
+  closeButton.onclick = _routeToCodePage;
 
   _updateButtonEnabledState();
 }
@@ -332,3 +402,5 @@ function _onNextQuestion() {
   _updateButtonEnabledState();
   _updateQuizUI();
 }
+
+// .......................................... quiz progress bar

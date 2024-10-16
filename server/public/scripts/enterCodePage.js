@@ -1,5 +1,5 @@
 import { genQuizPage } from "./quizPage.js";
-import { getAppData } from "./appData.js";
+import { clearAppData, getAppData } from "./appData.js";
 
 const AppData = getAppData();
 
@@ -8,6 +8,9 @@ export function genCodePage() {
 
   const element = document.getElementById("enter-code-page");
   element.classList.remove("hidden");
+
+  const codeInput = document.getElementById("code-input");
+  codeInput.value = "";
 
   const form = document.getElementById("enter-code-form");
 

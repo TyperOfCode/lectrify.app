@@ -50,9 +50,6 @@ def process_audio_buffer():
 
     result = model.transcribe(audio_data, fp16=False)
 
-    if result['text'].strip() == "" or "thank" in result['text'].strip():
-        return
-    
     textGot += result['text']
     textQuestion, usage = extractQuestion(textGot)
 

@@ -11,7 +11,6 @@ import { dirname, join } from "path";
 
 // local imports
 import { quizListToB64 } from "./quizEncoding.js";
-import rateLimit from "express-rate-limit";
 
 const app = express();
 const PORT = 4000;
@@ -48,6 +47,12 @@ app.use(serveStatic(join(__dirname, "public")));
  */
 
 /**
+ * @typedef {Object} QuestionStats
+ * @property {number} questionId - The ID of the question.
+ * @property {number[]} frequency - The frequency of each option being chosen first.
+ */
+
+/**
  * @typedef {Object} Quiz
  * @property {number} quizId - The ID of the quiz.
  * @property {string} question - The quiz question.
@@ -56,7 +61,7 @@ app.use(serveStatic(join(__dirname, "public")));
  */
 /**
  * @typedef {Object} RoomAppData
- * @property {Object.<number, {quizTitle: string, questionList: Quiz[]}>} roomAppData - The data structure holding quiz information for each room.
+ * @property {Object.<number, {quizTitle: string, questionList: Quiz[], questionStats: QuestionStats[]}>} roomAppData - The data structure holding quiz information for each room.
  */
 
 //.......................................... app
@@ -75,6 +80,7 @@ let roomAppData = {
       //   correctAnswerIdx: 1,
       // },
     ],
+    questionStats: [],
   },
 };
 
@@ -125,10 +131,23 @@ app.post("/admin/addQuiz", (req, res) => {
     roomAppData[code].questionList = [];
   }
 
+  if (!roomAppData[code].questionStats) {
+    roomAppData[code].questionStats = [];
+  }
+
   const questionId = Date.now();
   qData.questionId = questionId;
 
   roomAppData[code].questionList.push(qData);
+
+  if (
+    !roomAppData[code].questionStats.some((q) => q.questionId === questionId)
+  ) {
+    roomAppData[code].questionStats.push({
+      questionId,
+      frequency: new Array(qData.options.length).fill(0),
+    });
+  }
 
   // send quiz data to all clients
   clients.forEach((client) => {
@@ -140,7 +159,7 @@ app.post("/admin/addQuiz", (req, res) => {
   res.json({ success: true });
 });
 
-// .......................................... client routes
+// .......................................... public routes
 
 // event stream endpoint
 app.get("/sse/subscribeToLecture", (req, res) => {
@@ -228,6 +247,35 @@ app.post("/getQuizTitle", (req, res) => {
   }
 
   res.json({ quizTitle: roomAppData[code].quizTitle });
+});
+
+// submit answer stats
+app.post("/submitAnswerStat", (req, res) => {
+  const { code, questionId, answerIdx } = req.body;
+
+  if (!code || questionId === undefined || answerIdx === undefined) {
+    return res
+      .status(400)
+      .json({ error: "Missing code, questionId or answerIdx" });
+  }
+
+  if (roomAppData[code] === undefined) {
+    return res.status(400).json({ error: "Code doesnt exist" });
+  }
+
+  const questionStats = roomAppData[code].questionStats.find(
+    (q) => q.questionId === questionId
+  );
+
+  if (!questionStats) {
+    return res.status(400).json({ error: "Question not found" });
+  }
+
+  questionStats.frequency[answerIdx]++;
+
+  console.log("Updated question stats: ", questionStats);
+
+  return res.json({ success: true });
 });
 
 // start server

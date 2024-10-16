@@ -44,11 +44,17 @@
   border-radius: 50%;
   border-style: none;
   background-color: var(--primary-500-dm);
+
+  cursor: pointer;
 }
 
 .nav-icon {
   font-size: 48px;
   transition: color 0.3s;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .nav-icon:active {
@@ -57,6 +63,8 @@
 
 .disabled {
   color: var(--secondary-dm) !important;
+
+  cursor: default !important;
 }
 
 #go-left-ph {
@@ -73,6 +81,28 @@
 
 #go-right {
   margin-left: 1.2em;
+}
+
+#close-button {
+  margin-right: 0.5em;
+  color: var(--red-800);
+  background-color: var(--red-800-bg);
+
+  border-radius: 50%;
+  padding: 0.1em;
+
+  cursor: pointer;
+}
+
+.close-icon {
+  font-size: 32px;
+  transition: color 0.3s;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  user-select: none;
 }
 
 /* page */

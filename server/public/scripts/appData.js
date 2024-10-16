@@ -38,3 +38,30 @@ const AppData = {
 export function getAppData() {
   return AppData;
 }
+
+// local storage controller
+
+export function clearLocalStorage() {
+  localStorage.clear();
+}
+
+export function clearAppData() {
+  AppData.code = null;
+  AppData.questionList = null;
+  AppData.quizTitle = null;
+  AppData.userQuestionAnswers = null;
+  AppData.atQuestion = 0;
+
+  clearLocalStorage();
+}
+
+export function saveAppData() {
+  localStorage.setItem("appData", btoa(JSON.stringify(AppData)));
+}
+
+export function loadAppData() {
+  const data = localStorage.getItem("appData");
+  if (data) {
+    Object.assign(AppData, JSON.parse(atob(data)));
+  }
+}
