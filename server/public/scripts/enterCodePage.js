@@ -1,5 +1,5 @@
 import { genQuizPage } from "./quizPage.js";
-import { clearAppData, getAppData } from "./appData.js";
+import { getAppData } from "./appData.js";
 
 const AppData = getAppData();
 
@@ -21,19 +21,14 @@ export function genCodePage() {
 async function _handleCodeSubmit(event) {
   event.preventDefault();
   const code = document.getElementById("code-input").value;
-  console.log(code);
 
-  // localStorage.setItem("code", code);
-
-  AppData.code = code;
-
-  const exists = await _checkIfQuizExists();
+  const exists = await _checkIfQuizExists(code);
   if (!exists) {
     _onCodeNotExist();
     return;
   }
 
-  _routeToQuizPage();
+  _routeToQuizPage(code);
 }
 
 function _onCodeNotExist() {
@@ -56,16 +51,14 @@ function _onCodeNotExist() {
   }, 500);
 }
 
-function _routeToQuizPage() {
+function _routeToQuizPage(code) {
   const element = document.getElementById("enter-code-page");
   element.classList.add("hidden");
 
-  genQuizPage();
+  genQuizPage(code);
 }
 
-async function _checkIfQuizExists() {
-  const code = AppData.code;
-
+async function _checkIfQuizExists(code) {
   if (!code) {
     return false;
   }

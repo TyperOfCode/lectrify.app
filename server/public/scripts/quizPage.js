@@ -3,6 +3,14 @@ import {
   clearLocalStorage,
   saveAppData,
   loadAppData,
+  clearAppData,
+  setAppDataCode,
+  setAtQuestion,
+  setQuizTitle,
+  setUserQuestionAnswers,
+  addTriedToUserQuestionAnswers,
+  addUserQuestionAnswer,
+  setQuestionList,
 } from "./appData.js";
 import { genCodePage } from "./enterCodePage.js";
 
@@ -11,10 +19,16 @@ const AppData = getAppData();
 let currentReconnects = 0;
 const maxReconnects = 3;
 
-export async function genQuizPage() {
+export async function genQuizPage(code) {
   console.log("Generating Quiz Page");
 
   loadAppData();
+
+  if (code !== AppData.code) {
+    clearAppData();
+
+    setAppDataCode(code);
+  }
 
   try {
     await _initialAppState();
@@ -74,11 +88,11 @@ function _onReceiveQuestionList(questionList) {
     AppData.atQuestion = questionList.length - 1;
   }
 
-  AppData.questionList = questionList;
+  setQuestionList(questionList);
 
   // if the user is at the last question, move them to the next question
   if (AppData.atQuestion === AppData.questionList.length - 2) {
-    AppData.atQuestion++;
+    setAtQuestion(AppData.atQuestion + 1);
   }
 
   _updateQuizUI();
@@ -105,9 +119,10 @@ async function _initialAppState() {
 
   console.log("Received data: ", data);
 
-  AppData.quizTitle = data.quizTitle;
-  AppData.userQuestionAnswers = [];
-  AppData.atQuestion = 0;
+  setQuizTitle(data.quizTitle);
+
+  // set question list to null first.
+  setQuestionList([]);
 
   const element = document.getElementById("quiz-title");
   element.innerHTML = AppData.quizTitle;
@@ -124,13 +139,13 @@ function _routeToCodePage() {
 // ................................ quiz controller
 
 function _updateQuizToQuestion(questionId) {
-  AppData.atQuestion = questionId;
+  setAtQuestion(questionId);
   _updateQuizUI();
 }
 
 function _updateQuizUI() {
   if (AppData.atQuestion == null) {
-    AppData.atQuestion = 0;
+    setAtQuestion(0);
   }
 
   if (AppData.questionList === undefined || AppData.questionList.length === 0) {
@@ -240,17 +255,11 @@ async function _onAnswerClick(
   );
 
   if (answerIndex == -1) {
-    AppData.userQuestionAnswers.push({
-      questionId,
-      gotRight: isCorrect,
-      tried: [],
-    });
+    addUserQuestionAnswer(questionId, isCorrect);
 
     _sendAnswerToServer(questionId, chosenIndex);
     answerIndex = AppData.userQuestionAnswers.length - 1;
   }
-
-  const question = AppData.userQuestionAnswers[answerIndex];
 
   if (AppData.userQuestionAnswers[answerIndex].tried.includes(correctIndex)) {
     return;
@@ -268,7 +277,7 @@ async function _onAnswerClick(
     containerIcon.classList.add("red-text");
   }
 
-  question.tried.push(chosenIndex);
+  addTriedToUserQuestionAnswers(questionId, chosenIndex);
 
   console.log(AppData);
 }
@@ -387,7 +396,7 @@ function _onPrevQuestion() {
     return;
   }
 
-  AppData.atQuestion--;
+  setAtQuestion(AppData.atQuestion - 1);
 
   _updateButtonEnabledState();
   _updateQuizUI();
@@ -401,7 +410,7 @@ function _onNextQuestion() {
     return;
   }
 
-  AppData.atQuestion++;
+  setAtQuestion(AppData.atQuestion + 1);
 
   _updateButtonEnabledState();
   _updateQuizUI();
