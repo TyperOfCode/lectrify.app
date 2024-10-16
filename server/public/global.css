@@ -90,6 +90,13 @@ a {
   align-items: center;
 }
 
+.row-flex-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .inner-border {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -121,4 +128,28 @@ a {
 
 .red-outline {
   border-color: var(--red-800);
+}
+
+.material-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.phone-only {
+  display: none !important;
+}
+
+.laptop-only {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .phone-only {
+    display: block !important;
+  }
+
+  .laptop-only {
+    display: none !important;
+  }
 }

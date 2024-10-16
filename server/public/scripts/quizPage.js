@@ -10,9 +10,11 @@ export async function genQuizPage() {
   console.log("Generating Quiz Page");
 
   try {
-    _subscribeToEventStream();
+    AppData.questionList = [];
     await _initialAppState();
+    _subscribeToEventStream();
     _updateQuizToQuestion(null);
+    _attachQuizNavigationButtons();
   } catch (error) {
     console.error("Error generating quiz page:", error);
   }
@@ -59,6 +61,11 @@ function _onReceiveQuestionList(questionList) {
 
   if (!AppData.questionList) {
     _handleQuizEmpty();
+  }
+
+  if (AppData.questionList === undefined || AppData.questionList.length === 0) {
+    console.log("No question list found. Setting to end");
+    AppData.atQuestion = questionList.length - 1;
   }
 
   AppData.questionList = questionList;
@@ -179,6 +186,9 @@ function _updateQuizUI() {
   // make elements visible
   questionElement.classList.remove("hidden");
   answerListElement.classList.remove("hidden");
+
+  // update button state
+  _updateButtonEnabledState();
 }
 
 function _handleQuizEmpty() {
@@ -246,4 +256,79 @@ function _createQuestionContainer(icon, label) {
   /////////////////////////////////////////
 
   return { container, containerIcon, containerLabel };
+}
+
+// .......................................... quiz navigate buttons
+
+function _updateButtonEnabledState() {
+  // phone buttons
+  const prevButtonPh = document.getElementById("go-left-ph");
+  const nextButtonPh = document.getElementById("go-right-ph");
+
+  const prevButton = document.getElementById("go-left");
+  const nextButton = document.getElementById("go-right");
+
+  if (AppData.atQuestion === 0) {
+    prevButtonPh.classList.add("disabled");
+    prevButton.classList.add("disabled");
+  } else {
+    prevButtonPh.classList.remove("disabled");
+    prevButton.classList.remove("disabled");
+  }
+
+  if (
+    AppData.questionList === undefined ||
+    AppData.atQuestion === Math.max(AppData.questionList.length - 1, 0)
+  ) {
+    nextButtonPh.classList.add("disabled");
+    nextButton.classList.add("disabled");
+  } else {
+    nextButtonPh.classList.remove("disabled");
+    nextButton.classList.remove("disabled");
+  }
+}
+
+function _attachQuizNavigationButtons() {
+  console.log("Attaching uses");
+  // phone buttons
+  const prevButtonPh = document.getElementById("go-left-ph");
+  const nextButtonPh = document.getElementById("go-right-ph");
+
+  prevButtonPh.onclick = _onPrevQuestion;
+  nextButtonPh.onclick = _onNextQuestion;
+
+  // desktop buttons
+
+  const prevButton = document.getElementById("go-left");
+  const nextButton = document.getElementById("go-right");
+
+  prevButton.onclick = _onPrevQuestion;
+  nextButton.onclick = _onNextQuestion;
+
+  _updateButtonEnabledState();
+}
+
+function _onPrevQuestion() {
+  if (AppData.atQuestion === 0) {
+    return;
+  }
+
+  AppData.atQuestion--;
+
+  _updateButtonEnabledState();
+  _updateQuizUI();
+}
+
+function _onNextQuestion() {
+  if (
+    AppData.questionList === undefined ||
+    AppData.atQuestion === Math.max(AppData.questionList.length - 1, 0)
+  ) {
+    return;
+  }
+
+  AppData.atQuestion++;
+
+  _updateButtonEnabledState();
+  _updateQuizUI();
 }

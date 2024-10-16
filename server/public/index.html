@@ -11,6 +11,12 @@
       rel="stylesheet"
     />
 
+    <!-- material icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="global.css" />
     <link rel="stylesheet" href="codePage.css" />
     <link rel="stylesheet" href="quizPage.css" />
@@ -83,18 +89,49 @@
     <div id="quiz-page-container" class="hidden">
       <!-- title -->
       <div style="display: flex; flex-direction: row; align-items: center">
+        <div class="quiz-navigate phone-only" id="go-left-ph">
+          <span class="material-icons nav-icon">
+            keyboard_double_arrow_left
+          </span>
+        </div>
+
         <img src="assets/logo.svg" id="quiz-logo-image" />
         <h1 id="quiz-logo-title">Lectrify</h1>
+
         <div style="flex-grow: 1"></div>
         <div id="quiz-code"></div>
+
+        <div class="quiz-navigate phone-only" id="go-right-ph">
+          <span class="material-icons nav-icon">
+            keyboard_double_arrow_right
+          </span>
+        </div>
       </div>
 
       <div id="quiz-title">Quiz title</div>
 
       <div style="padding-top: 2em"></div>
       <div id="question-container" class="column-flex-center">
-        <div id="quiz-question" class="styled-box primary-box hidden"></div>
+        <!-- question space -->
+        <div class="row-flex-center">
+          <div class="quiz-navigate laptop-only" id="go-left">
+            <span class="material-icons nav-icon">
+              keyboard_double_arrow_left
+            </span>
+          </div>
+
+          <div id="quiz-question" class="styled-box primary-box hidden"></div>
+
+          <div class="quiz-navigate laptop-only" id="go-right">
+            <span class="material-icons nav-icon">
+              keyboard_double_arrow_right
+            </span>
+          </div>
+        </div>
+
         <div style="padding-top: 2.5em"></div>
+
+        <!-- options space -->
         <div
           id="quiz-answers"
           class="column-flex-center hidden"
