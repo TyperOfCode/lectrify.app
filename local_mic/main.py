@@ -109,6 +109,8 @@ def main():
         threading.Thread(target=transcribe_audio, daemon=True).start()
         
         print("\n"*100)
+        
+        print(sd.query_devices())
         input("Press Enter to stop the program...\n")
 
 if __name__ == "__main__":
