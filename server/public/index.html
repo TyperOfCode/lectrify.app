@@ -117,8 +117,13 @@
       <div id="header-quiz-divider"></div>
 
       <!-- progress bar phone -->
-      <div class="row-flex-center">
-        <div id="progress-bar-ph" class="hidden"></div>
+      <div
+        id="phone-progress-box"
+        class="row-flex-center progress-numbers hidden"
+      >
+        <div id="got-right-count-ph">0</div>
+        <div id="progress-bar-ph"></div>
+        <div id="got-wrong-count-ph">0</div>
       </div>
 
       <div id="question-container" class="column-flex-center">
@@ -155,8 +160,22 @@
       </div>
 
       <!-- progress bar laptop -->
-      <div class="row-flex-center">
-        <div id="progress-bar" class="hidden"></div>
+      <div id="progress-box" class="column-flex-center hidden">
+        <div id="progress-bar"></div>
+        <div class="row-flex-center progress-numbers" style="gap: 2em">
+          <div class="row-flex-center" style="gap: 0.3em">
+            <div id="got-right-count">0</div>
+            right
+          </div>
+          <div class="row-flex-center" style="gap: 0.3em">
+            <div id="got-wrong-count">0</div>
+            wrong
+          </div>
+          <div class="row-flex-center" style="gap: 0.3em">
+            <div id="todo-count">0</div>
+            todo
+          </div>
+        </div>
       </div>
     </div>
   </body>

@@ -420,6 +420,15 @@ function _onNextQuestion() {
   _updateQuizUI();
 }
 
+// handle arrow key press for the navigation functionality on laptop
+document.onkeydown = (e) => {
+  if (e.key === "ArrowLeft") {
+    _onPrevQuestion();
+  } else if (e.key === "ArrowRight") {
+    _onNextQuestion();
+  }
+};
+
 // .......................................... quiz progress bar
 
 const progressBarPhoneState = "progress-bar-ph";
@@ -432,6 +441,8 @@ function _updateProgressBar() {
 
   progressBar.innerHTML = "";
 
+  let gotRightCount = 0;
+  let gotWrongCount = 0;
   AppData.questionList.forEach((question, index) => {
     const percentage = 100 / AppData.questionList.length;
 
@@ -442,8 +453,10 @@ function _updateProgressBar() {
     let color = "var(--secondary-dm)";
     if (userAnswer === undefined) {
     } else if (userAnswer.gotRight === true) {
+      gotRightCount++;
       color = "var(--green-400)";
     } else if (userAnswer.gotRight === false) {
+      gotWrongCount++;
       color = "var(--red-400)";
     }
 
@@ -471,11 +484,26 @@ function _updateProgressBar() {
 
     progressBar.appendChild(element);
   });
+
+  let gotRightElement, gotWrongElement;
+  if (progressBarState === progressBarPhoneState) {
+    gotRightElement = document.getElementById("got-right-count-ph");
+    gotWrongElement = document.getElementById("got-wrong-count-ph");
+  } else if (progressBarState === progressBarLaptopState) {
+    gotRightElement = document.getElementById("got-right-count");
+    gotWrongElement = document.getElementById("got-wrong-count");
+    const todoElement = document.getElementById("todo-count");
+    todoElement.innerHTML =
+      AppData.questionList.length - gotRightCount - gotWrongCount;
+  }
+
+  gotRightElement.innerHTML = gotRightCount;
+  gotWrongElement.innerHTML = gotWrongCount;
 }
 
 function _handleViewportChange(e) {
-  const progressBarPhone = document.getElementById(progressBarPhoneState);
-  const progressBarLaptop = document.getElementById(progressBarLaptopState);
+  const progressBarPhoneBox = document.getElementById("phone-progress-box");
+  const progressBarLaptopBox = document.getElementById("progress-box");
 
   if (e.matches) {
     // if phone
@@ -483,11 +511,10 @@ function _handleViewportChange(e) {
       return;
     }
 
+    progressBarPhoneBox.classList.remove("hidden");
+    progressBarLaptopBox.classList.add("hidden");
+
     progressBarState = progressBarPhoneState;
-
-    progressBarPhone.classList.remove("hidden");
-    progressBarLaptop.classList.add("hidden");
-
     _updateProgressBar();
   } else {
     // if laptop
@@ -495,8 +522,8 @@ function _handleViewportChange(e) {
       return;
     }
 
-    progressBarPhone.classList.add("hidden");
-    progressBarLaptop.classList.remove("hidden");
+    progressBarPhoneBox.classList.add("hidden");
+    progressBarLaptopBox.classList.remove("hidden");
 
     progressBarState = progressBarLaptopState;
     _updateProgressBar();

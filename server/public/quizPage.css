@@ -215,6 +215,25 @@
 #progress-bar-ph {
   margin: 1em;
 }
+.progress-numbers {
+  color: var(--secondary-dm);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+#got-right-count,
+#got-right-count-ph {
+  color: var(--green-800);
+}
+
+#got-wrong-count,
+#got-wrong-count-ph {
+  color: var(--red-800);
+}
+
+#todo-count {
+  color: var(--text-dm);
+}
 
 /* phone view */
 /* mobile testing at 375x712 */
