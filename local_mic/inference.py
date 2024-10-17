@@ -32,7 +32,7 @@ You must determine whether or not what the user says contains a question for the
 Keep in mind this is transcribed text, and could have errors. 
 If there are multiple questions, say only the first complete one.
 
-Shorten question such that it is in a CONCISE quiz-format. DO NOT add any additional information.
+Shorten question such that it is in a CONCISE quiz-format. DO NOT add any additional information. 
 
 If the question does not make sense, set hasQuestion to false.
 If there is no question, set hasQuestion to false.
@@ -125,6 +125,7 @@ def generateMultipleChoice(question) -> tuple[IsRelevantResponse | None, int]:
   3 of them must be plausible, but incorrect.
   
   The answers should be DIFFICULT and they need to make people think.
+  Do not NUMBER or label the options, these labels are added later.
   """
   
   start_time = time.time()

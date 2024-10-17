@@ -366,15 +366,25 @@ function _updateButtonEnabledState() {
     prevButton.classList.remove("disabled");
   }
 
-  if (
-    AppData.questionList === undefined ||
-    AppData.atQuestion === Math.max(AppData.questionList.length - 1, 0)
-  ) {
-    nextButtonPh.classList.add("disabled");
-    nextButton.classList.add("disabled");
+  if (AppData.atQuestion === Math.max(AppData.questionList.length - 1, 0)) {
+    nextButtonPh.innerHTML =
+      '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>';
+    nextButton.innerHTML =
+      '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>';
+
+    nextButtonPh.style.backgroundColor = "var(--alt-action-bg-dm)";
+    nextButtonPh.style.color = "var(--alt-action-dm)";
+
+    nextButton.style.backgroundColor = "var(--alt-action-bg-dm)";
+    nextButton.style.color = "var(--alt-action-dm)";
   } else {
-    nextButtonPh.classList.remove("disabled");
-    nextButton.classList.remove("disabled");
+    nextButtonPh.innerHTML =
+      '<span class="material-icons nav-icon">keyboard_double_arrow_right</span>';
+    nextButton.innerHTML = nextButtonPh.innerHTML =
+      '<span class="material-icons nav-icon">keyboard_double_arrow_right</span>';
+
+    nextButtonPh.style = "";
+    nextButton.style = "";
   }
 }
 

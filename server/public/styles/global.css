@@ -2,7 +2,9 @@
 :root {
   --background-dm: #010922;
   --background-darker-dm: #00040f;
+
   --alt-action-dm: #e4af3a;
+  --alt-action-bg-dm: #e8a92120;
 
   --primary-800-dm: #63a9f8;
   --primary-500-dm: #63a9f71a;
