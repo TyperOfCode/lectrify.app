@@ -32,6 +32,11 @@
   cursor: pointer;
 }
 
+#quiz-page-container {
+  display: flex;
+  flex-direction: column;
+}
+
 /* navigation */
 .quiz-navigate {
   display: block;
@@ -138,7 +143,7 @@
 
 .container-title {
   font-size: 23px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .container-label {
@@ -187,6 +192,16 @@
 
 .red-text {
   color: var(--red-800) !important;
+}
+
+.alt-box {
+  border-color: var(--alt-action-dm);
+  background-color: var(--alt-action-bg-dm);
+  width: 60vw;
+}
+
+.alt-text {
+  color: var(--alt-action-dm);
 }
 
 /* progress bar */
@@ -289,6 +304,10 @@
   }
 
   .primary-box {
+    width: 70vw;
+  }
+
+  .alt-box {
     width: 70vw;
   }
 }

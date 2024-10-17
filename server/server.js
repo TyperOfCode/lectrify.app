@@ -118,7 +118,7 @@ app.post("/admin/addQuiz", (req, res) => {
     return res.status(400).json({ error: "Missing code or quiz data" });
   }
 
-  console.log("Received quiz data", qData);
+  console.log(`[${Date.now()}]\t` + "Received quiz data", qData);
 
   if (
     !qData.question ||
@@ -181,7 +181,7 @@ app.get("/sse/subscribeToLecture", (req, res) => {
     "Origin, X-Requested-With, Content-Type, Accept"
   );
 
-  console.log(`[${req.ip}] Connection attempted`);
+  console.log(`[${Date.now()}]\t` + `[${req.ip}] Connection attempted`);
 
   const code = req.query.code;
 
@@ -214,13 +214,19 @@ app.get("/sse/subscribeToLecture", (req, res) => {
     res,
   };
   clients.push(newClient);
-  console.log(`[${clients.length}] New client connected: ${clientId}`);
+  console.log(
+    `[${Date.now()}]\t` +
+      `[${clients.length}] New client connected: ${clientId}`
+  );
 
   // remove client from list when connection is closed
   req.on("close", () => {
     clearInterval(keepAliveInterval);
     clients = clients.filter((client) => client.id !== clientId);
-    console.log(`[${clients.length}] Client disconnected: ${clientId}`);
+    console.log(
+      `[${Date.now()}]\t` +
+        `[${clients.length}] Client disconnected: ${clientId}`
+    );
   });
 });
 
@@ -278,12 +284,30 @@ app.post("/submitAnswerStat", (req, res) => {
 
   questionStats.frequency[answerIdx]++;
 
-  console.log("Updated question stats: ", questionStats);
+  console.log(`[${Date.now()}]\t` + "Updated question stats: ", questionStats);
 
   return res.json({ success: true });
 });
 
+app.post("/getStatsForRoom", (req, res) => {
+  const { code } = req.body;
+
+  if (!code) {
+    return res.status(400).json({ error: "Missing code" });
+  }
+
+  if (roomAppData[code] === undefined) {
+    return res.status(400).json({ error: "Code doesnt exist" });
+  }
+
+  res.json({
+    roomTitle: roomAppData[code].quizTitle,
+    questions: roomAppData[code].questionList,
+    stats: roomAppData[code].questionStats,
+  });
+});
+
 // start server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`[${Date.now()}]\t` + `Server is running on port ${PORT}`);
 });
