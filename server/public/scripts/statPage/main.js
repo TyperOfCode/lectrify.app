@@ -407,7 +407,7 @@ function _renderPieChart() {
   const data = questionStat.frequency;
   const correctAnswerIdx = question.correctAnswerIdx;
 
-  if (data.frequency.reduce((acc, curr) => acc + curr) === 0) {
+  if (data.reduce((acc, curr) => acc + curr) === 0) {
     _renderEmptyPieChart();
     return;
   }
