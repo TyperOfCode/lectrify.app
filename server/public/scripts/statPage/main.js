@@ -332,6 +332,9 @@ function _addOptions(options, correctIndex) {
 function _displayQuestion(question) {
   _displayQuestionTitle(question.question);
   _addOptions(question.options, question.correctAnswerIdx);
+
+  const answerListElement = document.getElementById("quiz-answers");
+  answerListElement.classList.remove("hidden");
 }
 
 function _onPrevQuestion() {
