@@ -399,10 +399,15 @@ function _renderPieChart() {
     (stat) => stat.questionId === question.questionId
   );
 
+  if (questionStat === undefined) {
+    _renderEmptyPieChart();
+    return;
+  }
+
   const data = questionStat.frequency;
   const correctAnswerIdx = question.correctAnswerIdx;
 
-  if (!data) {
+  if (data.frequency.reduce((acc, curr) => acc + curr) === 0) {
     _renderEmptyPieChart();
     return;
   }
