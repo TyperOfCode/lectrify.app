@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/logo.svg" />
+    <title>Lectrify</title>
+
+    <!-- outfit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- material icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/statPage/statPage.css" />
+
+    <!-- chart js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="module" src="../scripts/statPage/main.js" defer></script>
+  </head>
+  <body>
+    <!-- title -->
+    <div class="row-flex-center">
+      <img src="../assets/logo.svg" id="logo-image" />
+      <h1 class="logo-title">Lectrify</h1>
+      <h1 class="logo-title" id="logo-title-admin">Admin</h1>
+
+      <div style="flex-grow: 1"></div>
+
+      <div id="quiz-code"></div>
+    </div>
+
+    <div class="row-flex-center" style="justify-content: start; gap: 1em">
+      <div id="quiz-title">Quiz title</div>
+      <div id="page-title">Stats Page</div>
+    </div>
+
+    <!-- question box -->
+    <div style="padding-top: 4em"></div>
+
+    <div class="row-flex-center" style="justify-content: space-evenly">
+      <!-- question column -->
+      <div class="column-flex-center">
+        <div
+          class="row-flex-center"
+          style="justify-content: start; align-items: start; gap: 1em"
+        >
+          <div class="quiz-navigate laptop-only" id="go-left">
+            <span class="material-icons nav-icon">
+              keyboard_double_arrow_left
+            </span>
+          </div>
+
+          <div id="quiz-question" class="styled-box primary-box hidden"></div>
+
+          <div class="quiz-navigate laptop-only" id="go-right">
+            <span class="material-icons nav-icon">
+              keyboard_double_arrow_right
+            </span>
+          </div>
+        </div>
+
+        <div style="padding-top: 2em"></div>
+
+        <div
+          id="quiz-answers"
+          class="column-flex-center"
+          style="justify-content: start; align-items: start; gap: 1em"
+        ></div>
+      </div>
+
+      <!-- PIE CHART -->
+      <div class="column-flex-center">
+        <canvas id="pie-chart" width="550" height="550"></canvas>
+        <div class="row-flex-center total-answers-box" style="gap: 0.5em; margin-right: 60px">
+          Total Answers:
+          <div id="total-answers">0</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

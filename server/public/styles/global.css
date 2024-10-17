@@ -148,6 +148,18 @@ a {
   display: block;
 }
 
+.disabled {
+  color: var(--secondary-dm) !important;
+
+  cursor: default !important;
+}
+
+.total-answers-box {
+  font-size: 35px;
+  font-weight: 600;
+  color: var(--text-dm);
+}
+
 @media (max-width: 600px) {
   .phone-only {
     display: block !important;
