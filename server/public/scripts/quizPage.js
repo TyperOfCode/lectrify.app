@@ -85,6 +85,8 @@ function _onReceiveQuestionList(questionList) {
     _handleQuizEmpty();
   }
 
+  let beforeState = [...AppData.questionList];
+
   if (AppData.questionList === undefined || AppData.questionList.length === 0) {
     console.log("No question list found. Setting to end");
     AppData.atQuestion = questionList.length - 1;
@@ -95,6 +97,10 @@ function _onReceiveQuestionList(questionList) {
   // if the user is at the last question, move them to the next question
   if (AppData.atQuestion === AppData.questionList.length - 2) {
     setAtQuestion(AppData.atQuestion + 1);
+  }
+
+  if (beforeState.length === 0 && AppData.questionList.length > 0) {
+    _handleViewportChange(mediaQuery);
   }
 
   _updateQuizUI();
@@ -504,6 +510,10 @@ function _updateProgressBar() {
 function _handleViewportChange(e) {
   const progressBarPhoneBox = document.getElementById("phone-progress-box");
   const progressBarLaptopBox = document.getElementById("progress-box");
+
+  if (AppData.questionList === undefined || AppData.questionList.length === 0) {
+    return;
+  }
 
   if (e.matches) {
     // if phone
