@@ -161,14 +161,20 @@ function _updateQuizUI() {
     return;
   }
 
-  const question = AppData.questionList[AppData.atQuestion];
+  if (AppData.atQuestion == AppData.questionList.length) {
+    // if we're out of the question list bounds
+    _displayWaitingForQuestion();
+    _updateProgressBar();
+    return;
+  }
+  _removeWaitingForQuestion();
 
   const waitingBox = document.getElementById("waiting-box");
-  waitingBox.classList.add("hidden");
-
   const questionElement = document.getElementById("quiz-question");
-
   const answerListElement = document.getElementById("quiz-answers");
+
+  const question = AppData.questionList[AppData.atQuestion];
+  waitingBox.classList.add("hidden");
 
   questionElement.innerHTML = "";
   // add question icon to answer
@@ -340,6 +346,41 @@ function _createQuestionContainer(icon, label) {
   return { container, containerIcon, containerLabel };
 }
 
+function _displayWaitingForQuestion() {
+  const questionElement = document.getElementById("quiz-question");
+  questionElement.innerHTML = "";
+
+  questionElement.classList.remove("hidden", "primary-box");
+  questionElement.classList.add("alt-box");
+
+  // add question icon to answer
+  const questionIcon = document.createElement("div");
+  questionIcon.classList.add("container-icon", "alt-text");
+  questionIcon.innerHTML = "?";
+
+  questionElement.appendChild(questionIcon);
+  /////////////////////////////////////////
+
+  // add question label to the element
+  const questionLabel = document.createElement("div");
+  questionLabel.classList.add("container-title");
+  questionLabel.innerHTML = "Waiting for next question...";
+
+  questionElement.appendChild(questionLabel);
+  /////////////////////////////////////////
+
+  const answerListElement = document.getElementById("quiz-answers");
+  answerListElement.classList.add("hidden");
+}
+
+function _removeWaitingForQuestion() {
+  const questionElement = document.getElementById("quiz-question");
+  questionElement.innerHTML = "";
+
+  questionElement.classList.remove("alt-box");
+  questionElement.classList.add("hidden", "primary-box");
+}
+
 // .......................................... quiz navigate buttons
 
 function _updateButtonEnabledState() {
@@ -366,25 +407,12 @@ function _updateButtonEnabledState() {
     prevButton.classList.remove("disabled");
   }
 
-  if (AppData.atQuestion === Math.max(AppData.questionList.length - 1, 0)) {
-    nextButtonPh.innerHTML =
-      '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>';
-    nextButton.innerHTML =
-      '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>';
-
-    nextButtonPh.style.backgroundColor = "var(--alt-action-bg-dm)";
-    nextButtonPh.style.color = "var(--alt-action-dm)";
-
-    nextButton.style.backgroundColor = "var(--alt-action-bg-dm)";
-    nextButton.style.color = "var(--alt-action-dm)";
+  if (AppData.atQuestion === AppData.questionList.length) {
+    nextButtonPh.classList.add("disabled");
+    nextButton.classList.add("disabled");
   } else {
-    nextButtonPh.innerHTML =
-      '<span class="material-icons nav-icon">keyboard_double_arrow_right</span>';
-    nextButton.innerHTML = nextButtonPh.innerHTML =
-      '<span class="material-icons nav-icon">keyboard_double_arrow_right</span>';
-
-    nextButtonPh.style = "";
-    nextButton.style = "";
+    nextButtonPh.classList.remove("disabled");
+    nextButton.classList.remove("disabled");
   }
 }
 
@@ -425,7 +453,7 @@ function _onPrevQuestion() {
 function _onNextQuestion() {
   if (
     AppData.questionList === undefined ||
-    AppData.atQuestion === Math.max(AppData.questionList.length - 1, 0)
+    AppData.atQuestion === AppData.questionList.length
   ) {
     return;
   }
@@ -459,9 +487,15 @@ function _updateProgressBar() {
 
   let gotRightCount = 0;
   let gotWrongCount = 0;
-  AppData.questionList.forEach((question, index) => {
-    const percentage = 100 / AppData.questionList.length;
 
+  let atWaitingPage = false;
+
+  if (AppData.atQuestion === AppData.questionList.length) {
+    atWaitingPage = true;
+  }
+
+  const percentage = 100 / AppData.questionList.length;
+  AppData.questionList.forEach((question, index) => {
     const userAnswer = AppData.userQuestionAnswers.find(
       (answer) => answer.questionId === question.questionId
     );
@@ -476,9 +510,15 @@ function _updateProgressBar() {
       color = "var(--red-400)";
     }
 
+    if (atWaitingPage && index === AppData.questionList.length - 1) {
+      return;
+    }
+
     let element;
 
-    if (index === 0) {
+    if (AppData.questionList.length === 1) {
+      element = _createWholeElement(color, true);
+    } else if (index === 0) {
       element = _createStartElement(
         percentage,
         color,
@@ -500,6 +540,16 @@ function _updateProgressBar() {
 
     progressBar.appendChild(element);
   });
+
+  if (atWaitingPage) {
+    let element;
+    if (AppData.questionList.length === 1) {
+      element = _createWholeElement("var(--alt-action-dm)", true);
+    } else {
+      element = _createEndElement(percentage, "var(--alt-action-dm)", true);
+    }
+    progressBar.appendChild(element);
+  }
 
   let gotRightElement, gotWrongElement;
   if (progressBarState === progressBarPhoneState) {
@@ -582,6 +632,13 @@ function _createEndElement(percentage, color, atElement = false) {
 
   element.style.borderTopRightRadius = "10px";
   element.style.borderBottomRightRadius = "10px";
+  return element;
+}
+
+function _createWholeElement(color, atElement = false) {
+  const element = _createProgressElement(100, color, atElement);
+
+  element.style.borderRadius = "10px";
   return element;
 }
 

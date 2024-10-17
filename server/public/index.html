@@ -20,9 +20,6 @@
       rel="stylesheet"
     />
 
-    <!-- loader -->
-    <link href="styles/loadIcon.css" rel="stylesheet" />
-
     <link rel="stylesheet" href="styles/global.css" />
     <link rel="stylesheet" href="styles/codePage.css" />
     <link rel="stylesheet" href="styles/quizPage.css" />
@@ -92,7 +89,7 @@
     </div>
 
     <!-- quiz page -->
-    <div id="quiz-page-container" class="hidden">
+    <div id="quiz-page-container" class="hidden" style="height: 95vh">
       <!-- title -->
       <div class="row-flex-center">
         <div class="quiz-navigate phone-only" id="go-left-ph">
@@ -131,7 +128,7 @@
 
       <div id="question-container" class="column-flex-center">
         <!-- question space -->
-        <div class="row-flex-center">
+        <div class="row-flex-center" style="align-items: start">
           <div class="quiz-navigate laptop-only" id="go-left">
             <span class="material-icons nav-icon">
               keyboard_double_arrow_left
@@ -163,6 +160,7 @@
       </div>
 
       <!-- progress bar laptop -->
+      <div style="flex-grow: 1"></div>
       <div id="progress-box" class="column-flex-center hidden">
         <div id="progress-bar"></div>
         <div class="row-flex-center progress-numbers" style="gap: 2em">
@@ -180,6 +178,7 @@
           </div>
         </div>
       </div>
+      <!--  -->
     </div>
   </body>
 </html>

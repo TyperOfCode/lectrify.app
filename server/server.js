@@ -82,6 +82,11 @@ let roomAppData = {
     ],
     questionStats: [],
   },
+  5678: {
+    quizTitle: "Wow! Another quiz!",
+    questionList: [],
+    questionStats: [],
+  },
 };
 
 let clients = [];
