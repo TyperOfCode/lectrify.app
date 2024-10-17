@@ -189,6 +189,30 @@ app.post("/admin/endRoom", (req, res) => {
   res.json({ success: true });
 });
 
+app.post("/admin/resetRoom", (req, res) => {
+  const { code } = req.body;
+
+  if (!code) {
+    return res.status(400).json({ error: "Missing code" });
+  }
+
+  if (!roomAppData[code]) {
+    return res.status(400).json({ error: "Room code doesn't exist." });
+  }
+
+  roomAppData[code].questionStats = [];
+  roomAppData[code].questionList = [];
+
+  // send quiz data to all clients
+  clients.forEach((client) => {
+    client.res.write(
+      `data: ${quizListToB64(roomAppData[code].questionList)}\n\n`
+    );
+  });
+
+  res.json({ success: true });
+});
+
 // .......................................... public routes
 
 // event stream endpoint
