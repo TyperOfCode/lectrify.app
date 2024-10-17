@@ -60,6 +60,14 @@ function _subscribeToEventStream() {
 
   eventSource.onmessage = (event) => {
     const questionList = JSON.parse(atob(event.data));
+
+    if (questionList.endQuiz === true) {
+      console.log("Quiz has ended. Closing connection...");
+      eventSource.close();
+
+      window.location.href = AppData.redirectOnEnd;
+    }
+
     _onReceiveQuestionList(questionList);
   };
 
@@ -124,7 +132,6 @@ async function _initialAppState() {
   });
 
   const data = await res.json();
-
   console.log("Received data: ", data);
 
   setQuizTitle(data.quizTitle);

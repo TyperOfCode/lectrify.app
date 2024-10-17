@@ -20,6 +20,7 @@
  * @property {string|null} quizTitle - The title of the quiz
  * @property {UserAnswer[]|null} userQuestionAnswers - The user's answers to the questions
  * @property {number} atQuestion - The question the user is currently at
+ * @property {string} redirectOnEnd - The URL to redirect to when the quiz ends.
  */
 
 /**
@@ -29,6 +30,9 @@
 const AppData = {
   code: null,
   atQuestion: 0,
+  // TODO: !!!UPDATE THIS ON DEMO DAY!!!
+  redirectOnEnd: "https://devpost.com/software/step-j04io8",
+  // redirectOnEnd: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 };
 
 /**
@@ -118,6 +122,12 @@ export function clearAppData() {
   AppData.atQuestion = 0;
 
   clearLocalStorage();
+}
+
+export function setRedirectOnEnd(redirectOnEnd) {
+  AppData.redirectOnEnd = redirectOnEnd;
+
+  saveAppData();
 }
 
 export function saveAppData() {

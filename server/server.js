@@ -164,6 +164,31 @@ app.post("/admin/addQuiz", (req, res) => {
   res.json({ success: true });
 });
 
+// end room
+app.post("/admin/endRoom", (req, res) => {
+  const { code } = req.body;
+
+  if (!code) {
+    return res.status(400).json({ error: "Missing code" });
+  }
+
+  if (!roomAppData[code]) {
+    return res.status(400).json({ error: "Room code doesn't exist." });
+  }
+
+  // TODO: commenting this out temporarily
+  // delete roomAppData[code];
+
+  // send quiz data to all clients
+  console.log("Ending room: ", code);
+  clients.forEach((client) => {
+    client.res.write(`data: ${btoa(JSON.stringify({ endQuiz: true }))}\n\n`);
+    client.res.end();
+  });
+
+  res.json({ success: true });
+});
+
 // .......................................... public routes
 
 // event stream endpoint
