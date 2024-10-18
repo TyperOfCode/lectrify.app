@@ -74,7 +74,7 @@ def determineRelevancyAndStandalone(question, themes : list[str]) -> tuple[bool,
   
   systemMessage = f"""
 The user is speaking to an audience. 
-You must determine whether or not the question is relevant to the speech themes of: {themes}.
+You must determine whether or not the question is relevant AT LEAST ONE speech themes of: {themes}.
 
 a question is standalone if it can be asked as a MULTIPLE CHOICE quiz question.
 

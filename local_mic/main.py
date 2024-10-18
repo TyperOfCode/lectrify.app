@@ -22,7 +22,7 @@ audio_queue = queue.Queue()
 
 textGot = ""
 
-themes = ["Computer Science", "Technology"]
+themes = ["Computer Science", "Technology", "Programming"]
 
 
 audio_buffer = []
