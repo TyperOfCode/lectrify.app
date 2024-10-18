@@ -11,6 +11,7 @@ import {
   addTriedToUserQuestionAnswers,
   addUserQuestionAnswer,
   setQuestionList,
+  setAppDataPreviousCode,
 } from "./appData.js";
 import { genCodePage } from "./enterCodePage.js";
 
@@ -25,10 +26,17 @@ export async function genQuizPage(code) {
 
   loadAppData();
 
-  if (code !== AppData.code) {
-    clearAppData();
-
+  if (AppData.previousCode === code) {
     setAppDataCode(code);
+  }
+
+  if (AppData.code !== code) {
+    clearAppData();
+  }
+
+  if (AppData.code === null) {
+    setAppDataCode(code);
+    setAppDataPreviousCode(null);
   }
 
   try {
@@ -147,6 +155,9 @@ function _routeToCodePage() {
   console.log("Routing to code page...");
   const element = document.getElementById("quiz-page-container");
   element.classList.add("hidden");
+
+  setAppDataPreviousCode(AppData.code);
+  setAppDataCode(null);
 
   genCodePage();
 }

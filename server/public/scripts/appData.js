@@ -16,6 +16,7 @@
 /**
  * @typedef {Object} AppData
  * @property {string|null} code - The code associated with the application data
+ * @property {string|null} previousCode - The code associated with the previous application data
  * @property {Question[]|null} questionList - The list of questions
  * @property {string|null} quizTitle - The title of the quiz
  * @property {UserAnswer[]|null} userQuestionAnswers - The user's answers to the questions
@@ -29,6 +30,7 @@
  */
 const AppData = {
   code: null,
+  previousCode: null,
   atQuestion: 0,
   redirectOnEnd: "https://devpost.com/software/lectrify-app",
   // redirectOnEnd: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -46,6 +48,12 @@ export function getAppData() {
 
 export function setAppDataCode(code) {
   AppData.code = code;
+
+  saveAppData();
+}
+
+export function setAppDataPreviousCode(previousCode) {
+  AppData.previousCode = previousCode;
 
   saveAppData();
 }

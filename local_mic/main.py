@@ -15,7 +15,7 @@ model = whisper.load_model("small.en")
 sampling_rate = 16000
 block_duration = 2
 speech_pause_duration = 0.5
-volume_threshold = 0.1
+volume_threshold = 0.2
 
 
 audio_queue = queue.Queue()
@@ -94,7 +94,7 @@ def transcribe_audio():
             audio_buffer.append(audio_data)
             print(f"Speech detected: {np.max(np.abs(audio_data))}...")
         else:
-
+            print(f"Speech not yet detected: {np.max(np.abs(audio_data))}...")
             if speech_detected and time.time() - last_speech_time >= speech_pause_duration:
                 print("Pause detected, processing accumulated audio...")
                 process_audio_buffer()

@@ -1,6 +1,7 @@
 import requests
 import json
 
+# SENDQUIZURL = "https://lectrify.app/admin/addQuiz"
 SENDQUIZURL = "http://localhost:4000/admin/addQuiz"
 ADMIN_SECRET = "admin"
 CODE = "1234"

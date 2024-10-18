@@ -7,10 +7,11 @@ const AppData = getAppData();
 function mainOnPageLoad() {
   console.log("PAGE LOADED!");
 
+  loadAppData();
   let code = AppData.code;
 
   if (code) {
-    genQuizPage();
+    genQuizPage(code);
     return;
   }
 
