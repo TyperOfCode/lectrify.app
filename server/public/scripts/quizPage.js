@@ -262,6 +262,10 @@ function _handleQuizEmpty() {
 
   const answerListElement = document.getElementById("quiz-answers");
   answerListElement.classList.add("hidden");
+
+  setAtQuestion(0);
+  _updateButtonEnabledState();
+  _updateProgressBar();
 }
 
 async function _onAnswerClick(
@@ -489,6 +493,27 @@ let progressBarState = null;
 
 function _updateProgressBar() {
   const progressBar = document.getElementById(progressBarState);
+  const progressBarPhoneBox = document.getElementById("phone-progress-box");
+  const progressBarLaptopBox = document.getElementById("progress-box");
+
+  if (progressBar === null) {
+    return;
+  }
+
+  if (AppData.questionList === undefined || AppData.questionList.length === 0) {
+    if (progressBarState === progressBarPhoneState) {
+      progressBarPhoneBox.classList.add("hidden");
+    } else if (progressBarState === progressBarLaptopState) {
+      progressBarLaptopBox.classList.add("hidden");
+    }
+    return;
+  } else {
+    if (progressBarState === progressBarPhoneState) {
+      progressBarPhoneBox.classList.remove("hidden");
+    } else if (progressBarState === progressBarLaptopState) {
+      progressBarLaptopBox.classList.remove("hidden");
+    }
+  }
 
   progressBar.innerHTML = "";
 
@@ -577,10 +602,6 @@ function _updateProgressBar() {
 function _handleViewportChange(e) {
   const progressBarPhoneBox = document.getElementById("phone-progress-box");
   const progressBarLaptopBox = document.getElementById("progress-box");
-
-  if (AppData.questionList === undefined || AppData.questionList.length === 0) {
-    return;
-  }
 
   if (e.matches) {
     // if phone
