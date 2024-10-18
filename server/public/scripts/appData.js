@@ -30,8 +30,7 @@
 const AppData = {
   code: null,
   atQuestion: 0,
-  // TODO: !!!UPDATE THIS ON DEMO DAY!!!
-  redirectOnEnd: "https://devpost.com/software/step-j04io8",
+  redirectOnEnd: "https://devpost.com/software/lectrify-app",
   // redirectOnEnd: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 };
 
