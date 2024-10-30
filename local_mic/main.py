@@ -94,7 +94,7 @@ def transcribe_audio():
             audio_buffer.append(audio_data)
             print(f"Speech detected: {np.max(np.abs(audio_data))}...")
         else:
-            print(f"Speech not yet detected: {np.max(np.abs(audio_data))}...")
+            print(f"[X] {round(np.max(np.abs(audio_data)), 3)} ... ")
             if speech_detected and time.time() - last_speech_time >= speech_pause_duration:
                 print("Pause detected, processing accumulated audio...")
                 process_audio_buffer()
